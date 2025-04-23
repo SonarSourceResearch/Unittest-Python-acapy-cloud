@@ -103,16 +103,8 @@ jobs:
 
           poetry run pytest --cov --cov-report=xml --ignore=app/tests/e2e/ --ignore=trustregistry/tests/e2e/
 
-      # Analyze with SonarCloud
-      - name: Analyze with SonarCloud
-        uses: SonarSource/sonarqube-scan-action@v5
-        env:
-          GITHUB_TOKEN: ${{ github.token }} # Needed to get PR information
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # Generate a token on Sonarcloud.io, add it to the secrets of this repo with the name SONAR_TOKEN (Settings > Secrets > Actions > add new repository secret)
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v4
         with:
-          # Additional arguments for the SonarCloud scanner
-          args: >
-            -Dsonar.projectKey=didx-xyz_acapy-cloud
-            -Dsonar.organization=didx-xyz
-            -Dsonar.coverage.exclusions=**/tests/**
-            -Dsonar.python.coverage.reportPaths=coverage.xml
+          name: code-coverage-report
+          path: coverage.xml
